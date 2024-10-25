@@ -5891,7 +5891,7 @@ void KinBody::Clone(InterfaceBaseConstPtr preference, int cloningoptions)
                 if( pgrabbedref->IsListNonCollidingLinksValid() ) {
                     FOREACHC(itLinkRef, pgrabbedref->_listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed) {
                         if( (*itLinkRef).second->GetParent() != r ) {
-                            RAVELOG_WARN_FORMAT("env=%s, could not restore link '%s' since parent in the list is different from that in cloning reference.", GetEnv()->GetNameId()%(*itLinkRef).second->GetName());
+                            RAVELOG_WARN_FORMAT("env=%s, could not restore link '%s' since parent in the list is different from cloning reference.", GetEnv()->GetNameId()%(*itLinkRef).second->GetName());
                             continue;
                         }
                         const int linkIndex = (*itLinkRef).second->GetIndex();
