@@ -5950,6 +5950,9 @@ void KinBody::Clone(InterfaceBaseConstPtr preference, int cloningoptions)
                 continue;
             }
             ListNonCollidingLinkPairs listNonCollidingLinkPairs;
+            const int envBodyIndexFirst = pFirst->GetEnvironmentBodyIndex();
+            const int envBodyIndexSecond = pSecond->GetEnvironmentBodyIndex();
+            const bool bHasSmallerFirstIndex = envBodyIndexFirst < envBodyIndexSecond;
             FOREACHC(itLinkPairRef, itInfoRef->second) {
                 const KinBody::LinkPtr pFirstLink = pFirst->GetLink((*itLinkPairRef).first->GetName());
                 if( !pFirstLink ) {
@@ -5961,11 +5964,20 @@ void KinBody::Clone(InterfaceBaseConstPtr preference, int cloningoptions)
                     RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find non-colliding link %s in body %s.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%(*itLinkPairRef).second->GetName()%pSecond->GetName());
                     continue;
                 }
-                listNonCollidingLinkPairs.emplace_back(pFirstLink, pSecondLink);
+                if( bHasSmallerFirstIndex ) {
+                    listNonCollidingLinkPairs.emplace_back(pFirstLink, pSecondLink);
+                }
+                else {
+                    listNonCollidingLinkPairs.emplace_back(pSecondLink, pFirstLink);
+                }
             }
             if( listNonCollidingLinkPairs.size() > 0 ){
-                const uint64_t key = _ComputeEnvironmentBodyIndicesPair(*pFirst, *pSecond);
-                _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed.emplace(key, std::move(listNonCollidingLinkPairs));
+                if( bHasSmallerFirstIndex ) {
+                    _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed.emplace(_ComputeEnvironmentBodyIndicesPair(envBodyIndexFirst, envBodyIndexSecond), std::move(listNonCollidingLinkPairs));
+                }
+                else {
+                    _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed.emplace(_ComputeEnvironmentBodyIndicesPair(envBodyIndexSecond, envBodyIndexFirst), std::move(listNonCollidingLinkPairs));
+                }
             }
         }
     } // end if not Clone_IgnoreGrabbedBodies
