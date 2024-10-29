@@ -3,6 +3,11 @@
 ChangeLog
 #########
 
+Version 0.156.1
+===============
+
+- Fix with grabbedInfo not getting correctly updated when loading a partial environment.
+
 Version 0.156.0
 ===============
 
