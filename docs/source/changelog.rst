@@ -3,6 +3,12 @@
 ChangeLog
 #########
 
+Version 0.157.0
+===============
+
+- Add `KinBody::GetDirectlyAttachedBodies`
+- Create a default `JSONReadable` for rapidjson::Document deserialization
+
 Version 0.156.1
 ===============
 
