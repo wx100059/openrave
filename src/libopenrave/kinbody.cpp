@@ -5906,19 +5906,19 @@ void KinBody::Clone(InterfaceBaseConstPtr preference, int cloningoptions)
                 pgrabbed->_setGrabberLinkIndicesToIgnore = pgrabbedref->_setGrabberLinkIndicesToIgnore; // can do this since link indices are the same
                 CopyRapidJsonDoc(pgrabbedref->_rGrabbedUserData, pgrabbed->_rGrabbedUserData);
                 if( pgrabbedref->IsListNonCollidingLinksValid() ) {
-                    FOREACHC(itLinkRef, pgrabbedref->_listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed) {
-                        if( (*itLinkRef).second->GetParent() != r ) {
-                            RAVELOG_WARN_FORMAT("env=%s, could not restore link '%s' since parent in the list is different from cloning reference.", GetEnv()->GetNameId()%(*itLinkRef).second->GetName());
+                    for( const std::pair<LinkConstPtr, LinkConstPtr>& grabbedGrabberLinkPair: pgrabbedref->_listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed ) {
+                        if( grabbedGrabberLinkPair.second->GetParent() != r ) {
+                            RAVELOG_WARN_FORMAT("env=%s, could not restore grabber link '%s' since the parent in the list is different from cloning reference.", GetEnv()->GetNameId() % grabbedGrabberLinkPair.second->GetName());
                             continue;
                         }
-                        const int linkIndex = (*itLinkRef).second->GetIndex();
+                        const int linkIndex = grabbedGrabberLinkPair.second->GetIndex();
                         if( linkIndex < 0 || linkIndex >= (int)_veclinks.size()) {
-                            RAVELOG_WARN_FORMAT("env=%s, could not restore link '%s' since its index %d is out of range (body num links is %d)", GetEnv()->GetNameId()%(*itLinkRef).second->GetName()%linkIndex%_veclinks.size());
+                            RAVELOG_WARN_FORMAT("env=%s, could not restore grabber link '%s' since its index %d is out of range (num links in grabber is %d)", GetEnv()->GetNameId() % grabbedGrabberLinkPair.second->GetName() % linkIndex % _veclinks.size());
                             continue;
                         }
-                        const KinBody::LinkPtr pGrabbedBodyLink = pgrabbedbody->GetLink((*itLinkRef).first->GetName());
+                        const KinBody::LinkPtr pGrabbedBodyLink = pgrabbedbody->GetLink(grabbedGrabberLinkPair.first->GetName());
                         if( !pGrabbedBodyLink ) {
-                            RAVELOG_WARN_FORMAT("env=%s, could not restore link '%s' since it's not in the links of body '%s'.", GetEnv()->GetNameId()%(*itLinkRef).first->GetName()%pgrabbedbody->GetName());
+                            RAVELOG_WARN_FORMAT("env=%s, could not restore grabbed link '%s' since it's not in the links of body '%s'.", GetEnv()->GetNameId() % grabbedGrabberLinkPair.first->GetName() % pgrabbedbody->GetName());
                             continue;
                         }
                         pgrabbed->_listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed.emplace_back(pGrabbedBodyLink, _veclinks[linkIndex]);
@@ -5941,44 +5941,44 @@ void KinBody::Clone(InterfaceBaseConstPtr preference, int cloningoptions)
         } // end for pgrabbedref
 
         // map list of inter grabbed.
-        FOREACHC(itInfoRef, r->_mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed) {
-            const ListNonCollidingLinkPairs& pairsRef = itInfoRef->second;
-            const uint64_t envBodyIndicesPair = itInfoRef->first;
-            if( pairsRef.empty() ) {
+        for( const std::pair<uint64_t, ListNonCollidingLinkPairs>& keyValuePair: r->_mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed ) {
+            const ListNonCollidingLinkPairs& interGrabbedLinkPairs = keyValuePair.second;
+            const uint64_t envBodyIndicesPair = keyValuePair.first;
+            if( interGrabbedLinkPairs.empty() ) {
                 continue;
             }
             if( !_IsListNonCollidingLinksValidFromEnvironmentBodyIndex(_GetFirstEnvironmentBodyIndexFromPair(envBodyIndicesPair)) ||
                 !_IsListNonCollidingLinksValidFromEnvironmentBodyIndex(_GetSecondEnvironmentBodyIndexFromPair(envBodyIndicesPair)) ) {
                 continue;
             }
-            const KinBodyPtr pFirstRef = pairsRef.front().first->GetParent(true);
-            const KinBodyPtr pSecondRef = pairsRef.front().second->GetParent(true);
+            const KinBodyPtr pFirstRef = interGrabbedLinkPairs.front().first->GetParent(true);
+            const KinBodyPtr pSecondRef = interGrabbedLinkPairs.front().second->GetParent(true);
             if( !pFirstRef || !pSecondRef ) {
                 continue; // somehow, relevant code in the above does not show warning nor exception. so, follow it for now.
             }
             const KinBodyPtr pFirst = GetEnv()->GetKinBody(pFirstRef->GetName());
             if( !pFirst ) {
-                RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find body %s for non-colliding link.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%pFirstRef->GetName());
+                RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find grabbed body %s for non-colliding link.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%pFirstRef->GetName());
                 continue;
             }
             const KinBodyPtr pSecond = GetEnv()->GetKinBody(pSecondRef->GetName());
             if( !pSecond ) {
-                RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find body %s for non-colliding link.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%pSecondRef->GetName());
+                RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find grabbed body %s for non-colliding link.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%pSecondRef->GetName());
                 continue;
             }
             ListNonCollidingLinkPairs listNonCollidingLinkPairs;
             const int envBodyIndexFirst = pFirst->GetEnvironmentBodyIndex();
             const int envBodyIndexSecond = pSecond->GetEnvironmentBodyIndex();
             const bool bHasSmallerFirstIndex = envBodyIndexFirst < envBodyIndexSecond;
-            FOREACHC(itLinkPairRef, itInfoRef->second) {
-                const KinBody::LinkPtr pFirstLink = pFirst->GetLink((*itLinkPairRef).first->GetName());
+            for( const std::pair<LinkConstPtr, LinkConstPtr>& interGrabbedLinkPair: interGrabbedLinkPairs ) {
+                const KinBody::LinkPtr pFirstLink = pFirst->GetLink(interGrabbedLinkPair.first->GetName());
                 if( !pFirstLink ) {
-                    RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find non-colliding link %s in body %s.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%(*itLinkPairRef).first->GetName()%pFirst->GetName());
+                    RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find non-colliding link %s in grabbed body %s.", GetEnv()->GetNameId() % GetName() % r->GetEnv()->GetNameId() % interGrabbedLinkPair.first->GetName() % pFirst->GetName());
                     continue;
                 }
-                const KinBody::LinkPtr pSecondLink = pSecond->GetLink((*itLinkPairRef).second->GetName());
+                const KinBody::LinkPtr pSecondLink = pSecond->GetLink(interGrabbedLinkPair.second->GetName());
                 if( !pSecondLink ) {
-                    RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find non-colliding link %s in body %s.", GetEnv()->GetNameId()%GetName()%r->GetEnv()->GetNameId()%(*itLinkPairRef).second->GetName()%pSecond->GetName());
+                    RAVELOG_WARN_FORMAT("env=%s, When cloning body '%s' from env=%s, could not find non-colliding link %s in grabbed body %s.", GetEnv()->GetNameId() % GetName() % r->GetEnv()->GetNameId() % interGrabbedLinkPair.second->GetName() % pSecond->GetName());
                     continue;
                 }
                 if( bHasSmallerFirstIndex ) {
@@ -5988,7 +5988,7 @@ void KinBody::Clone(InterfaceBaseConstPtr preference, int cloningoptions)
                     listNonCollidingLinkPairs.emplace_back(pSecondLink, pFirstLink);
                 }
             }
-            if( listNonCollidingLinkPairs.size() > 0 ){
+            if( listNonCollidingLinkPairs.size() > 0 ) {
                 if( bHasSmallerFirstIndex ) {
                     _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed.emplace(_ComputeEnvironmentBodyIndicesPair(envBodyIndexFirst, envBodyIndexSecond), std::move(listNonCollidingLinkPairs));
                 }

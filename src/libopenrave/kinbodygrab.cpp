@@ -38,8 +38,8 @@ static bool _IsLinkPairIncluded(const KinBody::Link* pLink1ToSearch,
                                 const KinBody::Link* pLink2ToSearch,
                                 const std::list<std::pair<KinBody::LinkConstPtr, KinBody::LinkConstPtr> >& listNonCollidingLinkPairs)
 {
-    FOREACHC(itLinks, listNonCollidingLinkPairs) {
-        if ( ((*itLinks).first.get() == pLink1ToSearch && (*itLinks).second.get() == pLink2ToSearch) ) {
+    for( const std::pair<KinBody::LinkConstPtr, KinBody::LinkConstPtr>& linkPair: listNonCollidingLinkPairs ) {
+        if ( linkPair.first.get() == pLink1ToSearch && linkPair.second.get() == pLink2ToSearch ) {
             return true;
         }
     }
@@ -1035,7 +1035,7 @@ bool KinBody::_IsListNonCollidingLinksValidFromEnvironmentBodyIndex(const int en
 {
     MapGrabbedByEnvironmentIndex::const_iterator itGrab = _grabbedBodiesByEnvironmentIndex.find(envBodyIndex);
     if( itGrab == _grabbedBodiesByEnvironmentIndex.end() ) {
-        RAVELOG_WARN_FORMAT("env=%s, could not check the IsListNonCollidingLinksValid for body '%s', since there is no grabbed body with envBodyIndex=%d.", GetEnv()->GetNameId()%GetName() % envBodyIndex);
+        RAVELOG_WARN_FORMAT("env=%s, could not check the IsListNonCollidingLinksValid for body '%s', since there is no grabbed body with envBodyIndex=%d.", GetEnv()->GetNameId() % GetName() % envBodyIndex);
         return false;
     }
     return itGrab->second->IsListNonCollidingLinksValid();
