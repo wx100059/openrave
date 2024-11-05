@@ -872,35 +872,35 @@ JointControlInfo_RobotControllerPtr PyJointControlInfo_RobotController::GetJoint
     info.controllerType = controllerType;
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisIndex) ) {
         size_t num = len(robotControllerAxisIndex);
-        OPENRAVE_EXCEPTION_FORMAT0(num == info.robotControllerAxisIndex.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisIndex.size(), "unexpected size", ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisIndex[i] = py::extract<int>(robotControllerAxisIndex[py::to_object(i)]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisMult) ) {
         size_t num = len(robotControllerAxisMult);
-        OPENRAVE_EXCEPTION_FORMAT0(num == info.robotControllerAxisMult.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisMult.size(), "unexpected size", ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisMult[i] = py::extract<dReal>(robotControllerAxisMult[py::to_object(i)]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisOffset) ) {
         size_t num = len(robotControllerAxisOffset);
-        OPENRAVE_EXCEPTION_FORMAT0(num == info.robotControllerAxisOffset.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisOffset.size(), "unexpected size", ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisOffset[i] = py::extract<dReal>(robotControllerAxisOffset[py::to_object(i)]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisManufacturerCode) ) {
         size_t num = len(robotControllerAxisManufacturerCode);
-        OPENRAVE_EXCEPTION_FORMAT0(num == info.robotControllerAxisManufacturerCode.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisManufacturerCode.size(), "unexpected size", ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisManufacturerCode[i] = py::extract<std::string>(robotControllerAxisManufacturerCode[i]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisProductCode) ) {
         size_t num = len(robotControllerAxisProductCode);
-        OPENRAVE_EXCEPTION_FORMAT0(num == info.robotControllerAxisProductCode.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisProductCode.size(), "unexpected size", ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisProductCode[i] = py::extract<std::string>(robotControllerAxisProductCode[i]);
         }
@@ -1001,7 +1001,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
     size_t num1, num2;
     if( !IS_PYTHONOBJECT_NONE(moveIONames) ) {
         num1 = len(moveIONames);
-        OPENRAVE_EXCEPTION_FORMAT0(num1 == info.moveIONames.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 == info.moveIONames.size(), "unexpected size", ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(moveIONames[py::to_object(i1)]));
@@ -1017,7 +1017,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(upperLimitIONames) ) {
         num1 = len(upperLimitIONames);
-        OPENRAVE_EXCEPTION_FORMAT0(num1 == info.upperLimitIONames.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 == info.upperLimitIONames.size(), "unexpected size", ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(upperLimitIONames[py::to_object(i1)]));
@@ -1033,7 +1033,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(upperLimitSensorIsOn) ) {
         num1 = len(upperLimitSensorIsOn);
-        OPENRAVE_EXCEPTION_FORMAT0(num1 == info.upperLimitSensorIsOn.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 == info.upperLimitSensorIsOn.size(), "unexpected size", ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(upperLimitSensorIsOn[py::to_object(i1)]));
@@ -1049,7 +1049,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(lowerLimitIONames) ) {
         num1 = len(lowerLimitIONames);
-        OPENRAVE_EXCEPTION_FORMAT0(num1 == info.lowerLimitIONames.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 == info.lowerLimitIONames.size(), "unexpected size", ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(lowerLimitIONames[py::to_object(i1)]));
@@ -1065,7 +1065,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(lowerLimitSensorIsOn) ) {
         num1 = len(lowerLimitSensorIsOn);
-        OPENRAVE_EXCEPTION_FORMAT0(num1 == info.lowerLimitSensorIsOn.size(), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 == info.lowerLimitSensorIsOn.size(), "unexpected size", ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(lowerLimitSensorIsOn[py::to_object(i1)]));
@@ -1222,7 +1222,7 @@ KinBody::JointInfoPtr PyJointInfo::GetJointInfo() {
 
     // We might be able to replace these exceptions with static_assert in C++11
     size_t num = len(_vaxes);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vaxes.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vaxes.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vaxes[i] = ExtractVector3(_vaxes[py::to_object(i)]);
     }
@@ -1232,79 +1232,79 @@ KinBody::JointInfoPtr PyJointInfo::GetJointInfo() {
     }
 
     num = len(_vresolution);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vresolution.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vresolution.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vresolution[i] = py::extract<dReal>(_vresolution[py::to_object(i)]);
     }
 
     num = len(_vmaxvel);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vmaxvel.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxvel.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxvel[i] = py::extract<dReal>(_vmaxvel[py::to_object(i)]);
     }
 
     num = len(_vhardmaxvel);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vhardmaxvel.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vhardmaxvel.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vhardmaxvel[i] = py::extract<dReal>(_vhardmaxvel[py::to_object(i)]);
     }
 
     num = len(_vmaxaccel);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vmaxaccel.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxaccel.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxaccel[i] = py::extract<dReal>(_vmaxaccel[py::to_object(i)]);
     }
 
     num = len(_vhardmaxaccel);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vhardmaxaccel.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vhardmaxaccel.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vhardmaxaccel[i] = py::extract<dReal>(_vhardmaxaccel[py::to_object(i)]);
     }
 
     num = len(_vmaxjerk);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vmaxjerk.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxjerk.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxjerk[i] = py::extract<dReal>(_vmaxjerk[py::to_object(i)]);
     }
 
     num = len(_vhardmaxjerk);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vhardmaxjerk.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vhardmaxjerk.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vhardmaxjerk[i] = py::extract<dReal>(_vhardmaxjerk[py::to_object(i)]);
     }
 
     num = len(_vmaxtorque);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vmaxtorque.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxtorque.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxtorque[i] = py::extract<dReal>(_vmaxtorque[py::to_object(i)]);
     }
 
     num = len(_vmaxinertia);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vmaxinertia.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxinertia.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxinertia[i] = py::extract<dReal>(_vmaxinertia[py::to_object(i)]);
     }
 
     num = len(_vweights);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vweights.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vweights.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vweights[i] = py::extract<dReal>(_vweights[py::to_object(i)]);
     }
 
     num = len(_voffsets);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._voffsets.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._voffsets.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._voffsets[i] = py::extract<dReal>(_voffsets[py::to_object(i)]);
     }
 
     num = len(_vlowerlimit);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vlowerlimit.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vlowerlimit.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vlowerlimit[i] = py::extract<dReal>(_vlowerlimit[py::to_object(i)]);
     }
 
     num = len(_vupperlimit);
-    OPENRAVE_EXCEPTION_FORMAT0(num == info._vupperlimit.size(), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num == info._vupperlimit.size(), "unexpected size", ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vupperlimit[i] = py::extract<dReal>(_vupperlimit[py::to_object(i)]);
     }
@@ -1847,7 +1847,7 @@ void PyLink::InitGeometries(object ogeometryinfos)
     for(size_t i = 0; i < geometries.size(); ++i) {
         PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfos[py::to_object(i)]);
         if( !pygeom ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
         }
         geometries[i] = pygeom->GetGeometryInfo();
     }
@@ -1858,7 +1858,7 @@ void PyLink::AddGeometry(object ogeometryinfo, bool addToGroups)
 {
     PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfo);
     if( !pygeom ) {
-        throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+        throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
     }
     _plink->AddGeometry(pygeom->GetGeometryInfo(), addToGroups);
 }
@@ -1867,7 +1867,7 @@ void PyLink::AddGeometryToGroup(object ogeometryinfo, const std::string& groupna
 {
     PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfo);
     if( !pygeom ) {
-        throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+        throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
     }
     _plink->AddGeometryToGroup(pygeom->GetGeometryInfo(), groupname);
 }
@@ -1897,7 +1897,7 @@ void PyLink::SetGroupGeometries(const std::string& name, object ogeometryinfos)
     for(size_t i = 0; i < geometries.size(); ++i) {
         PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfos[py::to_object(i)]);
         if( !pygeom ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
         }
         geometries[i] = pygeom->GetGeometryInfo();
     }
@@ -2844,7 +2844,7 @@ bool PyKinBody::InitFromGeometries(object ogeometries, const std::string& uri)
     for(size_t i = 0; i < geometries.size(); ++i) {
         PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometries[py::to_object(i)]);
         if( !pygeom ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
         }
         geometries[i] = *pygeom->GetGeometryInfo();
     }
@@ -2857,7 +2857,7 @@ void PyKinBody::InitFromLinkInfos(py::object olinkinfos, const std::string& uri)
     for(size_t i = 0; i < linkInfos.size(); ++i) {
         PyLinkInfoPtr pylinkinfo = py::extract<PyLinkInfoPtr>(olinkinfos[py::to_object(i)]);
         if( !pylinkinfo ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
         }
         linkInfos[i] = *pylinkinfo->GetLinkInfo();
     }
@@ -2888,7 +2888,7 @@ void PyKinBody::SetLinkGroupGeometries(const std::string& geomname, object olink
         for(size_t j = 0; j < geometries.size(); ++j) {
             PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(infoi[py::to_object(j)]);
             if( !pygeom ) {
-                throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+                throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
             }
             geometries[j] = pygeom->GetGeometryInfo();
         }
@@ -2902,7 +2902,7 @@ void PyKinBody::_ParseLinkInfos(object olinkinfos, std::vector<KinBody::LinkInfo
     for(size_t i = 0; i < vlinkinfos.size(); ++i) {
         PyLinkInfoPtr pylink = py::extract<PyLinkInfoPtr>(olinkinfos[py::to_object(i)]);
         if( !pylink ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
         }
         vlinkinfos[i] = pylink->GetLinkInfo();
     }
@@ -2914,7 +2914,7 @@ void PyKinBody::_ParseJointInfos(object ojointinfos, std::vector<KinBody::JointI
     for(size_t i = 0; i < vjointinfos.size(); ++i) {
         PyJointInfoPtr pyjoint = py::extract<PyJointInfoPtr>(ojointinfos[py::to_object(i)]);
         if( !pyjoint ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.JointInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.JointInfo"),ORE_InvalidArguments);
         }
         vjointinfos[i] = pyjoint->GetJointInfo();
     }
@@ -4218,7 +4218,7 @@ void PyKinBody::ResetGrabbed(object ograbbedinfos)
     for(size_t i = 0; i < vgrabbedinfos.size(); ++i) {
         PyGrabbedInfoPtr pygrabbed = py::extract<PyGrabbedInfoPtr>(ograbbedinfos[py::to_object(i)]);
         if( !pygrabbed ) {
-            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to Robot.GrabbedInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to Robot.GrabbedInfo"),ORE_InvalidArguments);
         }
         vgrabbedinfos[i] = pygrabbed->GetGrabbedInfo();
     }
