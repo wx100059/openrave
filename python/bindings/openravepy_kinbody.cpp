@@ -1847,7 +1847,7 @@ void PyLink::InitGeometries(object ogeometryinfos)
     for(size_t i = 0; i < geometries.size(); ++i) {
         PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfos[py::to_object(i)]);
         if( !pygeom ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
         }
         geometries[i] = pygeom->GetGeometryInfo();
     }
@@ -1858,7 +1858,7 @@ void PyLink::AddGeometry(object ogeometryinfo, bool addToGroups)
 {
     PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfo);
     if( !pygeom ) {
-        throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+        throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
     }
     _plink->AddGeometry(pygeom->GetGeometryInfo(), addToGroups);
 }
@@ -1867,7 +1867,7 @@ void PyLink::AddGeometryToGroup(object ogeometryinfo, const std::string& groupna
 {
     PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfo);
     if( !pygeom ) {
-        throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+        throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
     }
     _plink->AddGeometryToGroup(pygeom->GetGeometryInfo(), groupname);
 }
@@ -1897,7 +1897,7 @@ void PyLink::SetGroupGeometries(const std::string& name, object ogeometryinfos)
     for(size_t i = 0; i < geometries.size(); ++i) {
         PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometryinfos[py::to_object(i)]);
         if( !pygeom ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
         }
         geometries[i] = pygeom->GetGeometryInfo();
     }
@@ -2844,7 +2844,7 @@ bool PyKinBody::InitFromGeometries(object ogeometries, const std::string& uri)
     for(size_t i = 0; i < geometries.size(); ++i) {
         PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(ogeometries[py::to_object(i)]);
         if( !pygeom ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
         }
         geometries[i] = *pygeom->GetGeometryInfo();
     }
@@ -2857,7 +2857,7 @@ void PyKinBody::InitFromLinkInfos(py::object olinkinfos, const std::string& uri)
     for(size_t i = 0; i < linkInfos.size(); ++i) {
         PyLinkInfoPtr pylinkinfo = py::extract<PyLinkInfoPtr>(olinkinfos[py::to_object(i)]);
         if( !pylinkinfo ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
         }
         linkInfos[i] = *pylinkinfo->GetLinkInfo();
     }
@@ -2888,7 +2888,7 @@ void PyKinBody::SetLinkGroupGeometries(const std::string& geomname, object olink
         for(size_t j = 0; j < geometries.size(); ++j) {
             PyGeometryInfoPtr pygeom = py::extract<PyGeometryInfoPtr>(infoi[py::to_object(j)]);
             if( !pygeom ) {
-                throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
+                throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.GeometryInfo"),ORE_InvalidArguments);
             }
             geometries[j] = pygeom->GetGeometryInfo();
         }
@@ -2902,7 +2902,7 @@ void PyKinBody::_ParseLinkInfos(object olinkinfos, std::vector<KinBody::LinkInfo
     for(size_t i = 0; i < vlinkinfos.size(); ++i) {
         PyLinkInfoPtr pylink = py::extract<PyLinkInfoPtr>(olinkinfos[py::to_object(i)]);
         if( !pylink ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.LinkInfo"),ORE_InvalidArguments);
         }
         vlinkinfos[i] = pylink->GetLinkInfo();
     }
@@ -2914,7 +2914,7 @@ void PyKinBody::_ParseJointInfos(object ojointinfos, std::vector<KinBody::JointI
     for(size_t i = 0; i < vjointinfos.size(); ++i) {
         PyJointInfoPtr pyjoint = py::extract<PyJointInfoPtr>(ojointinfos[py::to_object(i)]);
         if( !pyjoint ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to KinBody.JointInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to KinBody.JointInfo"),ORE_InvalidArguments);
         }
         vjointinfos[i] = pyjoint->GetJointInfo();
     }
@@ -4218,7 +4218,7 @@ void PyKinBody::ResetGrabbed(object ograbbedinfos)
     for(size_t i = 0; i < vgrabbedinfos.size(); ++i) {
         PyGrabbedInfoPtr pygrabbed = py::extract<PyGrabbedInfoPtr>(ograbbedinfos[py::to_object(i)]);
         if( !pygrabbed ) {
-            throw OPENRAVE_ASSERT_FORMAT0(_("cannot cast to Robot.GrabbedInfo"),ORE_InvalidArguments);
+            throw OPENRAVE_EXCEPTION_FORMAT0(_("cannot cast to Robot.GrabbedInfo"),ORE_InvalidArguments);
         }
         vgrabbedinfos[i] = pygrabbed->GetGrabbedInfo();
     }
