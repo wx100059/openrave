@@ -1222,12 +1222,7 @@ KinBody::JointInfoPtr PyJointInfo::GetJointInfo() {
 
     // We might be able to replace these exceptions with static_assert in C++11
     size_t num = len(_vaxes);
-
-    // possible bug : info._vaxes.size() is fixed to 3 as "boost::array<Vector,3> _vaxes", so even for
-    // "hinge" we could not get 1, so commenting this ASSERT out until there's a better solution because
-    // right now it trips `test_kinematics : test_custombody` with hinge joint (len(_vaxes) == 1)
-
-//    OPENRAVE_ASSERT_FORMAT0(num == info._vaxes.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vaxes.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vaxes[i] = ExtractVector3(_vaxes[py::to_object(i)]);
     }
@@ -1237,79 +1232,79 @@ KinBody::JointInfoPtr PyJointInfo::GetJointInfo() {
     }
 
     num = len(_vresolution);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vresolution.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vresolution.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vresolution[i] = py::extract<dReal>(_vresolution[py::to_object(i)]);
     }
 
     num = len(_vmaxvel);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxvel.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vmaxvel.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxvel[i] = py::extract<dReal>(_vmaxvel[py::to_object(i)]);
     }
 
     num = len(_vhardmaxvel);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vhardmaxvel.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vhardmaxvel.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vhardmaxvel[i] = py::extract<dReal>(_vhardmaxvel[py::to_object(i)]);
     }
 
     num = len(_vmaxaccel);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxaccel.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vmaxaccel.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxaccel[i] = py::extract<dReal>(_vmaxaccel[py::to_object(i)]);
     }
 
     num = len(_vhardmaxaccel);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vhardmaxaccel.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vhardmaxaccel.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vhardmaxaccel[i] = py::extract<dReal>(_vhardmaxaccel[py::to_object(i)]);
     }
 
     num = len(_vmaxjerk);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxjerk.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vmaxjerk.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxjerk[i] = py::extract<dReal>(_vmaxjerk[py::to_object(i)]);
     }
 
     num = len(_vhardmaxjerk);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vhardmaxjerk.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vhardmaxjerk.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vhardmaxjerk[i] = py::extract<dReal>(_vhardmaxjerk[py::to_object(i)]);
     }
 
     num = len(_vmaxtorque);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxtorque.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vmaxtorque.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxtorque[i] = py::extract<dReal>(_vmaxtorque[py::to_object(i)]);
     }
 
     num = len(_vmaxinertia);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vmaxinertia.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vmaxinertia.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vmaxinertia[i] = py::extract<dReal>(_vmaxinertia[py::to_object(i)]);
     }
 
     num = len(_vweights);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vweights.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vweights.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vweights[i] = py::extract<dReal>(_vweights[py::to_object(i)]);
     }
 
     num = len(_voffsets);
-    OPENRAVE_ASSERT_FORMAT0(num == info._voffsets.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._voffsets.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._voffsets[i] = py::extract<dReal>(_voffsets[py::to_object(i)]);
     }
 
     num = len(_vlowerlimit);
-    // OPENRAVE_ASSERT_FORMAT0(num == info._vlowerlimit.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vlowerlimit.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vlowerlimit[i] = py::extract<dReal>(_vlowerlimit[py::to_object(i)]);
     }
 
     num = len(_vupperlimit);
-    // OPENRAVE_ASSERT_FORMAT0(num == info._vupperlimit.size(), _("unexpected size"), ORE_InvalidState);
+    OPENRAVE_ASSERT_FORMAT0(num <= info._vupperlimit.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vupperlimit[i] = py::extract<dReal>(_vupperlimit[py::to_object(i)]);
     }
