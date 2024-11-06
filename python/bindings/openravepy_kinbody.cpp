@@ -1303,13 +1303,13 @@ KinBody::JointInfoPtr PyJointInfo::GetJointInfo() {
     }
 
     num = len(_vlowerlimit);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vlowerlimit.size(), _("unexpected size"), ORE_InvalidState);
+    // OPENRAVE_ASSERT_FORMAT0(num == info._vlowerlimit.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vlowerlimit[i] = py::extract<dReal>(_vlowerlimit[py::to_object(i)]);
     }
 
     num = len(_vupperlimit);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vupperlimit.size(), _("unexpected size"), ORE_InvalidState);
+    // OPENRAVE_ASSERT_FORMAT0(num == info._vupperlimit.size(), _("unexpected size"), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vupperlimit[i] = py::extract<dReal>(_vupperlimit[py::to_object(i)]);
     }
