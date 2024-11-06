@@ -872,35 +872,35 @@ JointControlInfo_RobotControllerPtr PyJointControlInfo_RobotController::GetJoint
     info.controllerType = controllerType;
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisIndex) ) {
         size_t num = len(robotControllerAxisIndex);
-        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisIndex.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num <= info.robotControllerAxisIndex.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisIndex[i] = py::extract<int>(robotControllerAxisIndex[py::to_object(i)]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisMult) ) {
         size_t num = len(robotControllerAxisMult);
-        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisMult.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num <= info.robotControllerAxisMult.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisMult[i] = py::extract<dReal>(robotControllerAxisMult[py::to_object(i)]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisOffset) ) {
         size_t num = len(robotControllerAxisOffset);
-        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisOffset.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num <= info.robotControllerAxisOffset.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisOffset[i] = py::extract<dReal>(robotControllerAxisOffset[py::to_object(i)]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisManufacturerCode) ) {
         size_t num = len(robotControllerAxisManufacturerCode);
-        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisManufacturerCode.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num <= info.robotControllerAxisManufacturerCode.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisManufacturerCode[i] = py::extract<std::string>(robotControllerAxisManufacturerCode[i]);
         }
     }
     if( !IS_PYTHONOBJECT_NONE(robotControllerAxisProductCode) ) {
         size_t num = len(robotControllerAxisProductCode);
-        OPENRAVE_ASSERT_FORMAT0(num == info.robotControllerAxisProductCode.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num <= info.robotControllerAxisProductCode.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i = 0; i < num; ++i ) {
             info.robotControllerAxisProductCode[i] = py::extract<std::string>(robotControllerAxisProductCode[i]);
         }
