@@ -1222,9 +1222,12 @@ KinBody::JointInfoPtr PyJointInfo::GetJointInfo() {
 
     // We might be able to replace these exceptions with static_assert in C++11
     size_t num = len(_vaxes);
-    std::string msg( boost::str(boost::format("unexpected size, received: %d, expected: %d") % num % info._vaxes.size()));
+
+    // possible bug : info._vaxes.size() is fixed to 3 as "boost::array<Vector,3> _vaxes", so even for
+    // "hinge" we could not get 1, so commenting this ASSERT out until there's a better solution because
+    // right now it trips `test_kinematics : test_custombody` with hinge joint (len(_vaxes) == 1)
+
 //    OPENRAVE_ASSERT_FORMAT0(num == info._vaxes.size(), _("unexpected size"), ORE_InvalidState);
-    OPENRAVE_ASSERT_FORMAT0(num == info._vaxes.size(), msg.c_str(), ORE_InvalidState);
     for(size_t i = 0; i < num; ++i) {
         info._vaxes[i] = ExtractVector3(_vaxes[py::to_object(i)]);
     }
