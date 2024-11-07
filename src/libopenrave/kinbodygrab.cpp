@@ -18,7 +18,9 @@
 
 namespace OpenRAVE {
 
-/// \brief Push link to listNonCollidingGrabbedGrabberLinkPairs if the given links are not in collision each other. This is for grabbed-grabber link pairs.
+/// \brief Push (grabbedBodyLink, grabberLink) pairs to the given listNonCollidingGrabbedGrabberLinkPairs if they are not colliding
+///        with each other. Note that the order of pair will always be such that the first element is the grabbed
+///        body's link and the second element is the grabber's link.
 static void _PushGrabbedGrabberLinkPairsIfNonColliding(std::list<std::pair<KinBody::LinkConstPtr, KinBody::LinkConstPtr> >& listNonCollidingGrabbedGrabberLinkPairs,
                                                        CollisionCheckerBasePtr& pchecker,
                                                        const KinBody::LinkPtr& pGrabberLinkToCheck, const KinBody& grabbedBody)
@@ -31,7 +33,10 @@ static void _PushGrabbedGrabberLinkPairsIfNonColliding(std::list<std::pair<KinBo
     }
 }
 
-/// \brief Check if link pair is included in the list. Note that envBodyIndex for pLink1ToSearch's parent KinBody should be smaller than envBodyIndex for pLink2ToSearch's parent KinBody.
+/// \brief Return true if the link pair (pLink1ToSearch, pLink2ToSearch) is already in the given
+///        listNonCollidingInterGrabbedLinkPairs. Note that the order of the links must be such that body1.GetEnvironmentBodyIndex()
+///        < body2.GetEnvironmentBodyIndex() where body1 is the kinbody pLink1ToSearch belongs to and body2 is the
+///        kinbody pLink2ToSearch belongs to.
 /// \param[in] pLink1ToSearch, pLink2ToSearch : ptr of links to check.
 /// \param[in] listNonCollidingLinkPairs : taret list.
 static bool _IsInterGrabbedLinkPairIncluded(const KinBody::Link* pLink1ToSearch,
