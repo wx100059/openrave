@@ -2438,7 +2438,7 @@ protected:
     typedef boost::shared_ptr<KinBodyInfo> KinBodyInfoPtr;
     typedef boost::shared_ptr<KinBodyInfo const> KinBodyInfoConstPtr;
 
-    /// \brief Alias for list of non-colliding link pairs, mostly used for Grabbed checking.
+    /// \brief Alias for list of non-colliding link pairs, mainly used for collision checking for Grabbed.
     using ListNonCollidingLinkPairs = std::list<std::pair<KinBody::LinkConstPtr, KinBody::LinkConstPtr> >;
 
     /// \brief Saved data for Grabbed used in KinBodyStateSaver and KinBodyStateSaverRef
