@@ -1001,7 +1001,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
     size_t num1, num2;
     if( !IS_PYTHONOBJECT_NONE(moveIONames) ) {
         num1 = len(moveIONames);
-        OPENRAVE_ASSERT_FORMAT0(num1 == info.moveIONames.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 <= info.moveIONames.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(moveIONames[py::to_object(i1)]));
@@ -1017,7 +1017,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(upperLimitIONames) ) {
         num1 = len(upperLimitIONames);
-        OPENRAVE_ASSERT_FORMAT0(num1 == info.upperLimitIONames.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 <= info.upperLimitIONames.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(upperLimitIONames[py::to_object(i1)]));
@@ -1033,7 +1033,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(upperLimitSensorIsOn) ) {
         num1 = len(upperLimitSensorIsOn);
-        OPENRAVE_ASSERT_FORMAT0(num1 == info.upperLimitSensorIsOn.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 <= info.upperLimitSensorIsOn.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(upperLimitSensorIsOn[py::to_object(i1)]));
@@ -1049,7 +1049,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(lowerLimitIONames) ) {
         num1 = len(lowerLimitIONames);
-        OPENRAVE_ASSERT_FORMAT0(num1 == info.lowerLimitIONames.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 <= info.lowerLimitIONames.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(lowerLimitIONames[py::to_object(i1)]));
@@ -1065,7 +1065,7 @@ JointControlInfo_IOPtr PyJointControlInfo_IO::GetJointControlInfo()
 
     if( !IS_PYTHONOBJECT_NONE(lowerLimitSensorIsOn) ) {
         num1 = len(lowerLimitSensorIsOn);
-        OPENRAVE_ASSERT_FORMAT0(num1 == info.lowerLimitSensorIsOn.size(), _("unexpected size"), ORE_InvalidState);
+        OPENRAVE_ASSERT_FORMAT0(num1 <= info.lowerLimitSensorIsOn.size(), _("unexpected size"), ORE_InvalidState);
         for( size_t i1 = 0; i1 < num1; ++i1 ) {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
             num2 = len(extract<py::object>(lowerLimitSensorIsOn[py::to_object(i1)]));
