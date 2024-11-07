@@ -51,8 +51,9 @@ static bool _IsInterGrabbedLinkPairIncluded(const KinBody::Link* pLink1ToSearch,
     return false;
 }
 
-/// \brief Push link to listNonCollidingLinkPairs if the given grabbed bodies links are not in collision each other. This is inter-grabbed link pairs.
-///        Note that envBodyIndex of grabbedBody1 should be smaller than envBodyIndex of grabbedBody2.
+/// \brief Push to the given listNonCollidingInterGrabbedLinkPairs the pairs of non-colliding links between grabbedBody1 and grabbedBody2.
+///
+///        This function assumes that grabbedBody1.GetEnvironmentBodyIndex() < grabbedBody2.GetEnvironmentBodyIndex().
 static void _PushInterGrabbedLinkPairsIfNonColliding(std::list<std::pair<KinBody::LinkConstPtr, KinBody::LinkConstPtr> >& listNonCollidingInterGrabbedLinkPairs,
                                                      CollisionCheckerBasePtr& pchecker,
                                                      const KinBody& grabbedBody1,
