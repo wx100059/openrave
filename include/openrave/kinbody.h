@@ -3902,14 +3902,14 @@ public:
     rapidjson::Document _rGrabbedUserData; ///< user-defined data to be updated when kinbody grabs and releases objects
 private:
 
-    /// \brief push inter-grabbed-bodies non colliding link pairs to grabber.
+    /// \brief update grabber's _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed. if there is the existing list, push the inter-grabbed link pairs to it. otherwise, create the new list in the map and push the inter-grabbed link pairs to it.
     /// \param[out] pGrabber : updated grabber.
     /// \param[out] pchecker : collision checker
     /// \param[in] grabbedBody, otherGrabbedBody : grabbed body by this class, and other grabbed body to check.
-    void _PushNonCollidingLinkPairsForGrabbedBodies(KinBodyPtr& pGrabber,
-                                                    CollisionCheckerBasePtr& pchecker,
-                                                    const KinBody& grabbedBody,
-                                                    const KinBody& otherGrabbedBody);
+    void _UpdateMapListNonCollidingInterGrabbedLinkPairs(KinBodyPtr& pGrabber,
+                                                         CollisionCheckerBasePtr& pchecker,
+                                                         const KinBody& grabbedBody,
+                                                         const KinBody& otherGrabbedBody);
 
     bool _listNonCollidingIsValid = false; ///< a flag indicating whether the current _listNonCollidingLinksWhenGrabbed is valid or not.
     std::vector<KinBody::LinkPtr> _vAttachedToGrabbingLink; ///< vector of all links that are rigidly attached to _pGrabbingLink
