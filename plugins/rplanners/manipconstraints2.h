@@ -72,6 +72,10 @@ public:
         bool binitialized=false;
         Transform tparentinv = tparent.inverse();
         FOREACHC(itlink,linklist) {
+            if( !(*itlink)->IsEnabled() ) {
+                // Links that are not enabled are supposed to not be a physical thing so they should not affect tool speed/accel computation.
+                continue;
+            }
             AABB ablink = (*itlink)->ComputeLocalAABB(); // AABB of the link in its local coordinates
             Transform tdelta = tparentinv * (*itlink)->GetTransform();
             TransformMatrix tmdelta(tdelta);
