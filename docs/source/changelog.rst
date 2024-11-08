@@ -3,6 +3,17 @@
 ChangeLog
 #########
 
+Version 0.157.0
+===============
+
+- Add `KinBody::GetDirectlyAttachedBodies`
+- Create a default `JSONReadable` for rapidjson::Document deserialization
+
+Version 0.156.1
+===============
+
+- Fix with grabbedInfo not getting correctly updated when loading a partial environment.
+
 Version 0.156.0
 ===============
 
