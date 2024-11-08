@@ -73,7 +73,7 @@ public:
         Transform tparentinv = tparent.inverse();
         FOREACHC(itlink,linklist) {
             if( !(*itlink)->IsEnabled() ) {
-                // Links that are not enabled are supposed to not be a physical thing so they should not affect tool speed/accel computation.
+                // Links being disabled mean they are intentionally ignored. These links should not affect tool speed/accel computation.
                 continue;
             }
             if( (*itlink)->GetGeometries().empty() ) {
