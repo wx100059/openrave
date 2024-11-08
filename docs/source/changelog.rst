@@ -3,6 +3,11 @@
 ChangeLog
 #########
 
+Version 0.157.1
+===============
+
+- Exclude disabled and virtual links from manipulator child links AABB computation that is used for manipulator speed/acceleration computation in trajectory post-processing.
+
 Version 0.157.0
 ===============
 
