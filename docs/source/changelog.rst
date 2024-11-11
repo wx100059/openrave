@@ -10,6 +10,11 @@ Version 0.158.0
   - Store the link pair for grabbed-grabber collision in `Grabbed` class.
   - Store the link pair for inter-grabbed collision in `KinBody` class.
 
+Version 0.157.1
+===============
+
+- Exclude disabled and virtual links from manipulator child links AABB computation that is used for manipulator speed/acceleration computation in trajectory post-processing.
+
 Version 0.157.0
 ===============
 
