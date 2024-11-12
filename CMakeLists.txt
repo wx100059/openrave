@@ -269,6 +269,9 @@ find_package(Boost REQUIRED COMPONENTS filesystem system thread iostreams)
 set(OPENRAVE_BOOST_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 set(OPENRAVE_BOOST_LIB_DIRS ${Boost_LIBRARY_DIRS})
 
+# prevents CLANG from "error: integer value -1 is outside the valid range of values [0, 3] for the enumeration type 'sign_mixture_enum' [-Wenum-constexpr-conversion]"
+include_directories(SYSTEM ${OPENRAVE_BOOST_INCLUDE_DIRS})
+
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR COMPILER_IS_CLANG )
   set(NATIVE_COMPILE_FLAGS "" CACHE STRING "compilation flags to pass to tools that are executed at build-time. For example '-march=native -mtune=native'. By default this is empty.")
 else()
