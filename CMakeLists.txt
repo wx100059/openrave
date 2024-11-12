@@ -171,7 +171,7 @@ elseif( COMPILER_IS_CLANG )
   add_definitions("-Werror=return-stack-address")
   # prevents CLANG from "error: integer value -1 is outside the valid range of values [0, 3]
   # for the enumeration type 'sign_mixture_enum' [-Wenum-constexpr-conversion]"
-  add_definitions("-Wno-enum-constexpr-conversion")
+  add_definitions("-Wno-error=enum-constexpr-conversion")
 endif()
 
 set(OPENRAVE_EXPORT_CXXFLAGS)
