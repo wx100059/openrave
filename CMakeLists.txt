@@ -169,6 +169,9 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
   add_definitions("-Werror=return-local-addr")
 elseif( COMPILER_IS_CLANG )
   add_definitions("-Werror=return-stack-address")
+  # prevents CLANG from "error: integer value -1 is outside the valid range of values [0, 3]
+  # for the enumeration type 'sign_mixture_enum' [-Wenum-constexpr-conversion]"
+  add_definitions("-Wno-error=enum-constexpr-conversion")
 endif()
 
 set(OPENRAVE_EXPORT_CXXFLAGS)
@@ -243,7 +246,7 @@ if( MSVC )
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/msvc_include/stdint.h DESTINATION include/openrave-${OPENRAVE_VERSION_MAJOR}.${OPENRAVE_VERSION_MINOR} COMPONENT ${COMPONENT_PREFIX}dev)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/msvc_include)
   endif()
-  
+
   # have to install dlls manually
   if( MSVC70 OR MSVC71 )
     set(MSVC_PREFIX "vc70")
@@ -255,7 +258,7 @@ if( MSVC )
     set(MSVC_PREFIX "vc100")
   endif()
   set(OPENRAVE_LIBRARY_SUFFIX "${OPENRAVE_SOVERSION}-${MSVC_PREFIX}-mt" CACHE STRING "Suffix to append to library names")
-  
+
   # force multi-threaded DLL boost
   set(Boost_USE_MULTITHREAD ON)
   set(Boost_USE_STATIC_LIBS OFF)
