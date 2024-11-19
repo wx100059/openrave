@@ -75,7 +75,9 @@ public:
     virtual void DeserializeJSON(const rapidjson::Value& value, dReal fUnitScale, int options) = 0;
 };
 
-struct OPENRAVE_API ReadablesContainer {
+class OPENRAVE_API ReadablesContainer
+{
+public:
     virtual ~ReadablesContainer() = default;
 
     typedef std::map<std::string, ReadablePtr, CaseInsensitiveCompare> READERSMAP;
