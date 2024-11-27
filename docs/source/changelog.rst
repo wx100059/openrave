@@ -3,6 +3,11 @@
 ChangeLog
 #########
 
+Version 0.157.2
+===============
+
+- Add an interface to allow users to set `NeighborStateOptions` for jitterers to supply to their `_neighstatefn` calls, which affects how neighbor configurations are computed.
+
 Version 0.157.1
 ===============
 
