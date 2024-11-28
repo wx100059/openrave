@@ -2438,6 +2438,9 @@ protected:
     typedef boost::shared_ptr<KinBodyInfo> KinBodyInfoPtr;
     typedef boost::shared_ptr<KinBodyInfo const> KinBodyInfoConstPtr;
 
+    /// \brief Alias for list of non-colliding link pairs, mainly used for collision checking for Grabbed.
+    using ListNonCollidingLinkPairs = std::list<std::pair<KinBody::LinkConstPtr, KinBody::LinkConstPtr> >;
+
     /// \brief Saved data for Grabbed used in KinBodyStateSaver and KinBodyStateSaverRef
     ///        When KinBody::Grab, KinBody::Release, ...etc are called, new Grabbed instance is created in KinBody and the original ptr for the original Grabbed instance is swapped.
     ///        Thus, the original information of Grabbed instance is unchanged and holding the ptr of it as pGrabbed is enough for the saver.
@@ -2446,7 +2449,7 @@ protected:
     struct SavedGrabbedData
     {
         GrabbedPtr pGrabbed; ///< pointer of original Grabbed instance, which originally in KinBody's _grabbedBodiesByEnvironmentIndex.
-        std::list<KinBody::LinkConstPtr> listNonCollidingLinksWhenGrabbed; ///< copied values of Grabbed's _listNonCollidingLinksWhenGrabbed. See also the documentation of Grabbed class.
+        ListNonCollidingLinkPairs listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed; ///< copied values of Grabbed's _listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed. See also the documentation of Grabbed class.
         std::set<int> setGrabberLinkIndicesToIgnore; ///< copied values of Grabbed's _setGrabberLinkIndicesToIgnore. See also the documentation of Grabbed class.
         bool listNonCollidingIsValid = false; ///< copied values of Grabbed's _listNonCollidingIsValid. See also the documentation of Grabbed class.
     };
@@ -2485,6 +2488,7 @@ protected:
         std::vector<dReal> _vdoflastsetvalues;
         std::vector<dReal> _vMaxVelocities, _vMaxAccelerations, _vMaxJerks, _vDOFWeights, _vDOFLimits[2], _vDOFResolutions;
         std::unordered_map<int, SavedGrabbedData> _grabbedDataByEnvironmentIndex;
+        std::unordered_map<uint64_t, ListNonCollidingLinkPairs> _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed;
         bool _bRestoreOnDestructor;
 private:
         virtual void _RestoreKinBody(boost::shared_ptr<KinBody> body);
@@ -2531,6 +2535,7 @@ protected:
         std::vector<dReal> _vdoflastsetvalues;
         std::vector<dReal> _vMaxVelocities, _vMaxAccelerations, _vMaxJerks, _vDOFWeights, _vDOFLimits[2], _vDOFResolutions;
         std::unordered_map<int, SavedGrabbedData> _grabbedDataByEnvironmentIndex;
+        std::unordered_map<uint64_t, ListNonCollidingLinkPairs> _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed;
         bool _bRestoreOnDestructor;
         bool _bReleased; ///< if true, then body should not be restored
 private:
@@ -3716,10 +3721,12 @@ protected:
     /// \param[in] savedBody : saved KinBody inside of saver.
     /// \param[in] options : SaveParameters inside of saver.
     /// \param[in] savedGrabbedBodiesByEnvironmentIndex : _grabbedBodiesByEnvironmentIndex held in saver.
+    /// \param[in] savedMapListNonCollidingInterGrabbedLinkPairsWhenGrabbed : _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed held in saver.
     /// \param[in] bCalledFromClone : true this is called from clone, e.g. called from _RestoreGrabbedBodiesForClone. false if  Assumes that this is called from _RestoreKinBody of saver classes.
     void _RestoreGrabbedBodiesFromSavedData(const KinBody& savedBody,
                                             const int options,
                                             const std::unordered_map<int, SavedGrabbedData>& savedGrabbedDataByEnvironmentIndex,
+                                            const std::unordered_map<uint64_t, ListNonCollidingLinkPairs>& savedMapListNonCollidingInterGrabbedLinkPairsWhenGrabbed,
                                             const bool bCalledFromClone = false);
 
     /// \brief Save this kinbody's information.
@@ -3728,6 +3735,21 @@ protected:
 
     /// Ensures that _vAllPairsShortestPaths is initialized if it is not already
     void _EnsureAllPairsShortestPaths() const;
+
+    /// \brief Check if IsListNonCollidingLinksValid is true for the Grabbed instance with the given envBodyIndex.
+    /// \param[int] envBodyIndex : env body index.
+    bool _IsListNonCollidingLinksValidFromEnvironmentBodyIndex(const int envBodyIndex) const;
+
+    /// \brief Compute environment body indices pair. pack the two bodies' envBodyIndices (32bit int) into one environment body indices pair (uint64_t).
+    ///        Here, environment body indices pair is uint64_t, which higher 32bits are for body2 envBodyIndex, and which lower 32bits are for body1 envBodyIndex.
+    ///        Note that index1 < index2.
+    static uint64_t _ComputeEnvironmentBodyIndicesPair(const uint64_t index1, const uint64_t index2);
+
+    /// \brief Extract the first body's environmentBodyIndex from environment body indices pair.
+    static int _GetFirstEnvironmentBodyIndexFromPair(const uint64_t pair);
+
+    /// \brief Extract the first body's environmentBodyIndex from environment body indices pair.
+    static int _GetSecondEnvironmentBodyIndexFromPair(const uint64_t pair);
 
     std::string _name; ///< name of body
 
@@ -3798,6 +3820,18 @@ protected:
     mutable std::string __hashKinematicsGeometryDynamics; ///< hash serializing kinematics, dynamics and geometry properties of the KinBody
     int64_t _lastModifiedAtUS=0; ///< us, linux epoch, last modified time of the kinbody when it was originally loaded from the environment.
     int64_t _revisionId = 0; ///< the webstack revision for this loaded kinbody
+    /// _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed maps a pair of envBodyIndices of two grabbed bodies
+    /// (encoded into one uint64_t via _ComputeEnvironmentBodyIndicesPair) to a list of initially non-colliding link
+    /// pairs between the two. The ListNonCollidingLinkPairs for body1 and body2 is computed from state when the latest
+    /// body between body1 and body2 has been grabbed. Since these links in each pair are not colliding with each other
+    /// at the time of grabbing, they should remain non-colliding throughout (i.e. until either of them is released).
+    /// Notes:
+    /// - The enable states of links do *not* affect the membership of this ListNonCollidingLinkPair.
+    /// - ListNonCollidingLinkPair, which is the values of this map, only contains link pairs of *grabbed* bodies (i.e.
+    ///   not grabber's links).
+    /// - Each link pair (grabbed1Link, grabbed2Link) in ListNonCollidingLinkPair must be such that the first element
+    ///   corresponds to the grabbed body with lower environment body index.
+    std::unordered_map<uint64_t, ListNonCollidingLinkPairs> _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed;
 
 private:
     mutable std::vector<dReal> _vTempJoints;
@@ -3873,11 +3907,21 @@ public:
     // Member Variables
     KinBodyWeakPtr _pGrabbedBody; ///< the body being grabbed
     KinBody::LinkPtr _pGrabbingLink; ///< the link used for grabbing _pGrabbedBody. Its transform (as well as the transforms of other links rigidly attached to _pGrabbingLink) relative to the grabbed body remains constant until the grabbed body is released.
-    std::list<KinBody::LinkConstPtr> _listNonCollidingLinksWhenGrabbed; ///< list of links of the grabber that are not touching the grabbed body *at the time of grabbing*. Since these links are not colliding with the grabbed body at the time of grabbing, they should remain non-colliding with the grabbed body throughout. If, while grabbing, they collide with the grabbed body at some point, CheckSelfCollision should return true. It is important to note that the enable state of a link does *not* affect its membership of this list.
+    KinBody::ListNonCollidingLinkPairs _listNonCollidingGrabbedGrabberLinkPairsWhenGrabbed; ///< list of link pairs of the grabber that are not touching the grabbed body *at the time of grabbing*. Since these links are not colliding with the grabbed body at the time of grabbing, they should remain non-colliding with the grabbed body throughout. If, while grabbing, they collide with the grabbed body at some point, CheckSelfCollision should return true. It is important to note that the enable state of a link does *not* affect its membership of this list. Each pair in the list should be [Grabbed-link, Grabber-link]. Note that this does not contain link pairs from two grabbed bodies, c.f. KinBody::_mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed.
     Transform _tRelative; ///< the relative transform between the grabbed body and the grabbing link. tGrabbingLink*tRelative = tGrabbedBody.
     std::set<int> _setGrabberLinkIndicesToIgnore; ///< indices to the links of the grabber whose collisions with the grabbed bodies should be ignored.
     rapidjson::Document _rGrabbedUserData; ///< user-defined data to be updated when kinbody grabs and releases objects
 private:
+
+    /// \brief update grabber's _mapListNonCollidingInterGrabbedLinkPairsWhenGrabbed. if there is the existing list, push the inter-grabbed link pairs to it. otherwise, create the new list in the map and push the inter-grabbed link pairs to it.
+    /// \param[out] pGrabber : updated grabber.
+    /// \param[out] pchecker : collision checker
+    /// \param[in] grabbedBody, otherGrabbedBody : grabbed body by this class, and other grabbed body to check.
+    void _UpdateMapListNonCollidingInterGrabbedLinkPairs(KinBodyPtr& pGrabber,
+                                                         CollisionCheckerBasePtr& pchecker,
+                                                         const KinBody& grabbedBody,
+                                                         const KinBody& otherGrabbedBody);
+
     bool _listNonCollidingIsValid = false; ///< a flag indicating whether the current _listNonCollidingLinksWhenGrabbed is valid or not.
     std::vector<KinBody::LinkPtr> _vAttachedToGrabbingLink; ///< vector of all links that are rigidly attached to _pGrabbingLink
     KinBody::KinBodyStateSaverPtr _pGrabberSaver; ///< statesaver that saves the snapshot of the grabber at the time Grab is called. The saved state will be used (i.e. restored) temporarily when computation of _listNonCollidingLinksWhenGrabbed is necessary.
