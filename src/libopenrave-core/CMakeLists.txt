@@ -2,7 +2,7 @@ check_function_exists(mkstemp HAVE_MKSTEMP)
 if( HAVE_MKSTEMP )
   add_definitions("-DHAVE_MKSTEMP")
 endif()
-
+include(GNUInstallDirs)
 set(OPENRAVE_CORE_LIBRARIES ${openrave_libraries} ${OPENRAVE_CURL_LIBRARIES})
 set(OPENRAVE_CORE_STATIC_LIBRARIES ${openrave_static_libraries})
 set(openrave_core_SOURCES openrave-core.cpp environment-core.h openrave-core.h ravep.h  xmlreaders-core.cpp genericcollisionchecker.cpp genericphysicsengine.cpp genericrobot.cpp multicontroller.cpp generictrajectory.cpp jsonparser/gpgutils.cpp jsonparser/jsonreader.cpp jsonparser/jsonwriter.cpp jsonparser/jsondownloader.cpp)
@@ -83,8 +83,12 @@ set_target_properties(libopenrave-core PROPERTIES OUTPUT_NAME openrave${OPENRAVE
                                   VERSION ${OPENRAVE_VERSION}
                                   COMPILE_FLAGS "${LIBOPENRAVE_COMPILE_FLAGS} -DOPENRAVE_CORE_DLL_EXPORTS -DOPENRAVE_CORE_DLL"
                                   LINK_FLAGS "${LIBOPENRAVE_LINK_FLAGS}")
+# target_link_libraries(libopenrave-core
+#   PRIVATE boost_assertion_failed ${IVCON_LIBRARY} ${OPENRAVE_CORE_STATIC_LIBRARIES} openrave_gpgme
+#   PUBLIC libopenrave ${OPENRAVE_CORE_LIBRARIES}
+# )
 target_link_libraries(libopenrave-core
-  PRIVATE boost_assertion_failed ${IVCON_LIBRARY} ${OPENRAVE_CORE_STATIC_LIBRARIES} openrave_gpgme
+  PRIVATE boost_assertion_failed ${IVCON_LIBRARY} ${OPENRAVE_CORE_STATIC_LIBRARIES} 
   PUBLIC libopenrave ${OPENRAVE_CORE_LIBRARIES}
 )
 install(TARGETS libopenrave-core
@@ -131,7 +135,7 @@ if( OPT_STATIC )
                                                 COMPILE_FLAGS "${LIBOPENRAVE_COMPILE_FLAGS} "
                                                 LINK_FLAGS "${LIBOPENRAVE_LINK_FLAGS}")
   target_link_libraries(libopenrave-core_static
-    PRIVATE boost_assertion_failed ${IVCON_LIBRARY} ${OPENRAVE_CORE_STATIC_LIBRARIES} openrave_gpgme
+    PRIVATE boost_assertion_failed ${IVCON_LIBRARY} ${OPENRAVE_CORE_STATIC_LIBRARIES} 
     PUBLIC libopenrave_static ${OPENRAVE_CORE_LIBRARIES}
   )
   install(TARGETS libopenrave-core_static

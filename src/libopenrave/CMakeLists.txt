@@ -1,4 +1,5 @@
 cmake_policy(SET CMP0005 NEW)
+include(GNUInstallDirs)
 set(openrave_lib_SOURCES
   configurationspecification.cpp
   collisionchecker.cpp
